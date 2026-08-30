@@ -303,7 +303,7 @@ def register_tile_interactive():
     ).strip()
 
     symbol = input(
-        "アセットキーを登録してください （例）G\n> "
+        "アセットのシンボルを登録してください （例）G\n> "
     ).strip()
 
     layer_input = input(
@@ -845,6 +845,21 @@ def delete_asset(asset_id):
     save_registry()
 
 
+def print_registered_symbols():
+    """
+    現在登録されているSymbol一覧を表示する。
+    """
+
+    if not SYMBOLS:
+        print("現在登録されているSymbolはありません。")
+        return
+
+    print("現在登録されているSymbol:")
+
+    for symbol, info in SYMBOLS.items():
+        print(f"  {symbol}: {info['name']} ({info['type']})")
+
+
 def delete_asset_interactive():
     """
     対話形式で、削除したいTile/PresetのSymbol（アルファベット等）を
@@ -852,11 +867,12 @@ def delete_asset_interactive():
     """
 
     symbol = input(
-        "削除したいアセットのSymbolを入力してください （例）G\n> "
+        "削除したいアセットのシンボルを入力してください （例）G\n> "
     ).strip()
 
     if symbol not in SYMBOLS:
         print(f"Symbol '{symbol}' は登録されていません。")
+        print_registered_symbols()
         return None
 
     asset_id = SYMBOLS[symbol]["asset_id"]
@@ -865,5 +881,6 @@ def delete_asset_interactive():
     delete_asset(asset_id)
 
     print(f"削除しました: {symbol} ({name} / {asset_id})")
+    print_registered_symbols()
 
     return asset_id

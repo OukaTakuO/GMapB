@@ -3,6 +3,6 @@
 cd /d %~dp0
 cd ..\.tools\python
 
-python register_tile.py
+python delete_tile.py
 
 pause

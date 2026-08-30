@@ -20,6 +20,7 @@ Unity等で、ゼロからマップを1マスずつ作る負担を減らすこ�
 ## セットアップ
 
 Python 3.9以降が必要です（標準ライブラリのみで動作し、追加のインストールは不要です）。
+Unityプロジェクト内にAssets/Editorフォルダを作成し、、./UnityScriptフォルダ内の「GMapBImporter.cs」を配置してください。
 
 ```bash
 git clone <このリポジトリのURL>
