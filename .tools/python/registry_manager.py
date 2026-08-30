@@ -147,6 +147,8 @@ def reset_registry():
         "cell_size": 1
     }
 
+    print("GMapBをリセットしました。")
+
     save_registry()
 
 

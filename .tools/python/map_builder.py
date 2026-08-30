@@ -1015,6 +1015,8 @@ def export_spec(filename="spec.json", output_dir=Path(__file__).parent.parent.pa
             indent=4
         )
 
+    print("「output_prompt」フォルダにAI用ファイルを生成しました。")
+
     return output_path
 
 

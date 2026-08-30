@@ -5,6 +5,4 @@ cd ..\.tools\python
 
 python reset_gmapb.py
 
-echo GMapBをリセットしました。
-
 pause
