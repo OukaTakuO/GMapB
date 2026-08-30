@@ -1,0 +1,18 @@
+# Registry実データ（利用者ごとに異なるため、空の状態で公開する）
+.tools/registry/assets.json
+.tools/registry/symbols.json
+.tools/registry/registry_meta.json
+
+# GMapBの実行結果（人によって内容が変わるため、リポジトリには含めない）
+output_prompt/
+output_unity/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS/エディタ
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
