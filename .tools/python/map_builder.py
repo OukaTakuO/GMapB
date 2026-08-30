@@ -903,7 +903,7 @@ def build_and_export_unity_interactive():
 
     map_path = input(
         ".mapファイルのパスを入力してください "
-        "（例）output_map/grassland_10x10.map\n> "
+        "（例）C:/Users/user/Downloads/grassland_10x10.map\n> "
     ).strip()
 
     unity_path = build_and_export_unity(map_path)
