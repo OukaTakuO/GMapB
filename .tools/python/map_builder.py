@@ -913,6 +913,100 @@ def build_and_export_unity_interactive():
     return unity_path
 
 
+def build_and_export_rpgtkool(
+    map_path, 
+    output_dir=Path(__file__).parent.parent.parent / "output_rpgtkool", 
+    tileset_id=1, 
+    display_name="", 
+    map_id=1
+): 
+    """
+    .mapファイルを読み込み、検証・レイアウト計算・Preset展開を経て、
+    RPGツクールMV/MZのMapXXX.json形式でoutput_dirへ書き出す
+    一気通貫の実行関数
+
+    build_and_export_unity()のRPGツクール版。
+    GMapBのレイヤー番号は昇順ソートしてz0〜z3へ割り当てるため、
+    5つ以上のレイヤーを持つ.mapは使用できない
+    （build_rpgtkool_map()側でエラーになる）。
+
+    map_id: 
+        出力ファイル名"MapXXX.json"の3桁ID。
+        RPGツクール側のMap IDと一致させる必要がある。
+
+    戻り値: (rpgtkool_map_data, output_path) のタプル
+    """
+
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    map_data = load_map(map_path)
+    validate_map(map_data)
+    layouts = calculate_layout(map_data)
+    canvas_width, canvas_height = calculate_canvas_size(layouts)
+
+    gmapb_data = export_gmapb(
+        map_data, 
+        layouts, 
+        canvas_width, 
+        canvas_height
+    )
+
+    rpgtkool_data = export_rpgtkool(gmapb_data)
+
+    rpgtkool_map = build_rpgtkool_map(
+        rpgtkool_data, 
+        tileset_id=tileset_id, 
+        display_name=display_name
+    )
+
+    output_path = output_dir / f"Map{map_id:03d}.json"
+    save_rpgtkool_map(rpgtkool_map, output_path)
+
+    return rpgtkool_map, output_path
+
+
+def build_and_export_rpgtkool_interactive(): 
+    """
+    対話形式で.mapファイルのパスなどを指定し、
+    RPGツクール用MapXXX.jsonまで一気通貫で出力する。
+    """
+
+    map_path = input(
+        ".mapファイルのパスを入力してください。\n"
+        "（例）C:/Users/user/Downloads/grassland_10x10.map\n> "
+    ).strip()
+
+    tileset_id_input = input(
+        "RPGツクール側のTileset IDを入力してください"
+        "（任意、未入力の場合は1）\n"
+    ).strip()
+
+    tileset_id = int(tileset_id_input) if tileset_id_input != "" else 1
+
+    display_name = input(
+        "マップの表示名を入力してください（任意、未入力の場合は空欄）\n"
+    ).strip()
+
+    map_id_input = input(
+        "出力する Map ID を入力してください（任意、未入力の場合は1）\n"
+        "（例）1 → Map001.json\n"
+    ).strip()
+
+    map_id = int(map_id_input) if map_id_input != "" else 1
+
+    rpgtkool_map, output_path = build_and_export_rpgtkool(
+        map_path, 
+        tileset_id=tileset_id, 
+        display_name=display_name, 
+        map_id=map_id
+    )
+
+    print(f"rpgtkool: {output_path}")
+
+    return output_path
+
+
 MAP_FORMAT_GUIDE = """
 GMapBの.mapファイルは、プレーンテキストでマップを表現する形式です。
 書き方には「シンプルな書き方」と「レイヤー分けする書き方」の2種類があり、

@@ -1,6 +1,8 @@
 本スクリプトは、Game Map Builder で作成したマップデータをUnityプロジェクトに
 タイルマップとしてインポートするための追加機能を実装するものです。
 
+※RPGツクールMV/MZのみ使用の場合は必要ありません！！
+
 
 【Unityプロジェクト内配置パス】
 Assets/Editor/GMapBImporter.cs

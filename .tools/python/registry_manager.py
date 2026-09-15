@@ -243,6 +243,19 @@ def set_cell_size(value):
     save_registry()
 
 
+def calculate_rpgtkool_tile_id(sheet, row, col):
+    """
+    RPGツクールMV/MZのデフォルトタイルセット上でのtileIdを計算する。
+    row/colは0始まり。オートタイル(A1～A4)は非対応
+    """
+    base = {"B": 0, "C": 256, "D": 512, "E": 768, "A5": 1536}
+
+    if sheet not in base:
+        raise ValueError(f"未対応のシートです: {sheet}")
+
+    return base[sheet] + row * 8 + col
+
+
 def register_tile(name, symbol, layer, tile, export_ids=None, role=""):
     """
     Tile Assetを登録する。
@@ -344,6 +357,26 @@ def register_tile_interactive():
             cell_size = pixel_size / 100
 
             set_cell_size(cell_size)
+
+    rpgtkool_answer = input(
+        "RPGツクール向けビルドの想定ですか？　(Y/N)\n"
+    ).strip()
+
+    if rpgtkool_answer in ("y", "Y"):
+
+        print(
+            "使用するシートの番号を選んでください\n"
+            "1: B\n2: C\n3: D\n4: E\n5: A5\n"
+        )
+        sheet_choice = input("> ").strip()
+
+        sheet_map = {"1": "B", "2": "C", "3": "D", "4": "E", "5": "A5"}
+        sheet = sheet_map[sheet_choice]
+
+        row = int(input("使用マスの行番号を入力してください（0始まり）\n>").strip())
+        col = int(input("使用マスの列番号を入力してください（0始まり）\n>").strip())
+
+        export_ids["rpgtkool"] = calculate_rpgtkool_tile_id(sheet, row, col)
 
     role = input(
         "このタイルアセットの役割を記述してください。\n> "
